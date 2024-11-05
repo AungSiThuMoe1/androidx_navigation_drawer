@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,17 +22,41 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.food2u.androidxnavigationdrawer.LanguageActivity;
 import com.food2u.androidxnavigationdrawer.R;
+import com.food2u.androidxnavigationdrawer.musicService;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-
+    Button btnStart,btnStop;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
+       btnStart=root.findViewById(R.id.btn_start);
+       btnStop=root.findViewById(R.id.btn_stop);
+
+       btnStart.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent i=new Intent(getActivity(), musicService.class);
+               getActivity().startService(i);
+
+           }
+       });
+
+       btnStop.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent i=new Intent(getActivity(),musicService.class);
+               getActivity().stopService(i);
+
+           }
+       });
+
+
+
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

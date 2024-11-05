@@ -31,11 +31,17 @@ public class SmsListener extends BroadcastReceiver {
                 Bundle bundle = intent.getExtras();
                 Object[] data = (Object[]) bundle.get("pdus");
                 for (Object pdu : data) {
+                    SmsMessage message=null;
                     //Log.d(tag, "legacy SMS implementation (before KitKat)");
-                    SmsMessage message = SmsMessage.createFromPdu((byte[]) pdu);
-                    if (message == null) {
-                        // Log.e(tag, "SMS message is null -- ABORT");
-                        break;
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                       String format = bundle.getString("format");
+                        message = SmsMessage.createFromPdu((byte[]) pdu,format);
+                    }else {
+                        message = SmsMessage.createFromPdu((byte[]) pdu);
+                        if (message == null) {
+                            // Log.e(tag, "SMS message is null -- ABORT");
+                            break;
+                        }
                     }
                     messageBody = message.getDisplayMessageBody();
                     messageNumber = message.getDisplayOriginatingAddress();
